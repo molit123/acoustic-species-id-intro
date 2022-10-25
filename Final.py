@@ -20,11 +20,12 @@ def stratifiedRS(csv_path, numClips):
     # Count the number of successful clips per AudioMoth device
     count_clips_df = success_recordings.groupby('AudioMothCode').count()
 
-    # Find the value of the minimum number of clips (this is the value of AM-8 since it has an issue with the number of clips)
-    minimum_clips = count_clips_df.loc['AM-8'].get('FileName')
+    # Find the value of the minimum number of clips 
+    MIN_CLIPS = 24
 
     # Filter the DataFrame to get only the AudioMoths that are greater than the minimum value (this is the first strata layer)
-    first_strata = count_clips_df[count_clips_df.get('FileName') > minimum_clips]
+    first_strata = count_clips_df[count_clips_df.get('FileName') > MIN_CLIPS]
+    first_strata = first_strata[first_strata.index != 'AM-8']
     first_strata_audiomoths = first_strata.index.values.tolist()
 
     # AudioMoths with a valid number of clips ranging the entire day
